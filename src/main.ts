@@ -19,15 +19,28 @@ function updateDisplay() {
   }
 }
 
-function autoClick(){
-    counter++;
+
+let lastTime: number = 0
+
+function step(time:number){
+    if (!lastTime){
+        lastTime = time
+    }
+
+    const deltaTime = (time-lastTime) / 1000
+    const increment = deltaTime
+    counter += increment
     updateDisplay();
+    lastTime = time;
+
+    requestAnimationFrame(step)
 
 
 }
+requestAnimationFrame(step)
 
-let intervalID = setInterval(autoClick, 1000)
-console.log(intervalID)
+
+
 
 
 buttonToClick.id = "myButton";
