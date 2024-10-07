@@ -2,54 +2,68 @@ import "./style.css";
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 
-const gameName = "My super duper amazing game";
+const gameName = "A Game of Stones";
 const header = document.createElement("h1");
-const TotalCount = document.createElement("div");
-const buttonToClick = document.createElement("button");
-const upgradeButton = document.createElement("button");
-const upgrade1Count = document.createElement("div");
-const upgradeB = document.createElement("button");
-const upgrade2Count = document.createElement("div");
-const upgradeC = document.createElement("button");
-const upgrade3Count = document.createElement("div");
+const crownDisplay = document.createElement("div");
+const gatherCrownsButton = document.createElement("button");
 const growthRateText = document.createElement("div");
 
-let counter: number = 0;
+const upgradeSerfs = document.createElement("button");
+const serfsCountDisplay = document.createElement("div");
+serfsCountDisplay.id = "serfID"
+
+const upgradeKnights = document.createElement("button");
+const knightsCountDisplay = document.createElement("div");
+knightsCountDisplay.id = "knightsID"
+
+const upgradeBards = document.createElement("button");
+const bardsCountDisplay = document.createElement("div");
+bardsCountDisplay.id = "bardID";
+
+let crowns: number = 0;
 let lastTime: number = 0;
 let growthRate: number = 0;
 
-TotalCount.textContent = `${counter} Books`;
-growthRateText.textContent = `Current Growth Rate: ${growthRate} books/sec`;
-upgradeButton.id = "FirstUpdate";
-upgradeB.id = "UpgradeB";
-upgradeC.id = "UpgradeC";
-upgradeButton.disabled = true;
-upgradeB.disabled = true;
-upgradeC.disabled = true;
+crownDisplay.textContent = `${crowns} Crowns`;
+growthRateText.textContent = `Current Influence Rate: ${growthRate} crowns/sec`;
+upgradeSerfs.id = "SerfWorkforce";
+upgradeKnights.id = "KnightsOfTheSquareTable";
+upgradeBards.id = "SingingBards";
+upgradeSerfs.disabled = true;
+upgradeKnights.disabled = true;
+upgradeBards.disabled = true;
+
 header.innerHTML = gameName;
-upgradeButton.innerHTML = "I cost 10";
-buttonToClick.innerHTML = "📖";
+gatherCrownsButton.innerHTML = "🪙🪙🪙";
 document.title = gameName;
-upgradeB.innerText = "I cost 100";
-upgradeC.innerText = "I cost 1000";
+
+upgradeSerfs.innerHTML = " 'Hire' Serfs (10 Crowns)";
+
+upgradeKnights.innerText = "Recruit Knights (100 Crowns)";
+upgradeBards.innerText = "Singing Bards (1000 Crowns)";
 
 const upgrades: { [button: string]: number } = {
-  [upgradeButton.id]: 10,
-  [upgradeB.id]: 100,
-  [upgradeC.id]: 1000,
+  [upgradeSerfs.id]: 10,
+  [upgradeKnights.id]: 100,
+  [upgradeBards.id]: 1000,
 };
-const playerItems: { [name: string]: number } = {
-  [upgradeButton.id]: 0,
-  [upgradeB.id]: 0,
-  [upgradeC.id]: 0,
-}; //going to have a hashmap to display their purchaces
+const playerItems: { [key: string]: number } = {
+    "SerfWorkforce": 0,
+    "KnightsOfTheSquareTable": 0,
+    "SingingBards": 0,
+  };
 
+const upgradeDisplays: { [key: string]: HTMLDivElement } = {
+"SerfWorkforce": serfsCountDisplay,
+"KnightsOfTheSquareTable": knightsCountDisplay,
+"SingingBards": bardsCountDisplay,
+};
 function updateDisplay() {
-  if (TotalCount) {
-    TotalCount.textContent = `${counter.toFixed(2)} Books`;
+  if (crownDisplay) {
+    crownDisplay.textContent = `${crowns.toFixed(2)} Crowns`;
   }
   if (growthRateText) {
-    growthRateText.textContent = `Current Growth Rate: ${growthRate}`;
+    growthRateText.textContent = `Current Influence Rate: ${growthRate.toFixed(2)} crowns/sec`;
   }
 }
 
@@ -60,20 +74,12 @@ function step(time: number) {
 
   const deltaTime = (time - lastTime) / 1000;
   const increment = deltaTime * growthRate;
-  counter += increment;
+  crowns += increment;
   updateDisplay();
   lastTime = time;
 
   checkUpgrades();
-  displayPlayerUpgrades();
-
-  //   if (counter >= 10 && upgradeButton.disabled){
-  //     upgradeButton.disabled = false;
-  //   }
-  //   if (counter < 10 && !upgradeButton.disabled){
-  //     upgradeButton.disabled = true;
-
-  //   }
+//   displayPlayerUpgrades();
 
   requestAnimationFrame(step);
 }
@@ -84,58 +90,68 @@ function checkUpgrades() {
     const upgradeAmount = upgrades[buttonText];
     const button = document.getElementById(buttonText) as HTMLButtonElement;
     if (button) {
-      button.disabled = counter < upgradeAmount;
+      button.disabled = crowns < upgradeAmount;
     }
   });
 }
 
-function displayPlayerUpgrades() {
-  Object.keys(playerItems).forEach((buttonID) => {
-    const amount = playerItems[buttonID];
-    const button = document.getElementById(buttonID) as HTMLButtonElement;
-    button.innerHTML = `You have ${amount} of upgrade ${buttonID}`;
-  });
-}
 
-buttonToClick.id = "myButton";
-buttonToClick.addEventListener("click", () => {
-  console.log(counter);
-  counter++;
+// function displayPlayerUpgrades() {
+//   Object.keys(playerItems).forEach((key) => {
+//     if (playerItems[key]){
+//         playerItems[key].innerText = `You possess ${playerItems[key]} ${key.replace(/.*?(.).*?([A-Z])/g, "$1$2").toLowerCase()} orders`;
+//     }
+//   });
+// }
+
+gatherCrownsButton.id = "myButton";
+gatherCrownsButton.addEventListener("click", () => {
+  console.log(crowns);
+  crowns++;
   updateDisplay();
 });
 
-upgradeButton.addEventListener("click", () => {
-  counter -= upgrades[upgradeButton.id];
-  growthRate += 100.1;
-  playerItems[upgradeButton.id] += 1;
-  upgrades[upgradeButton.id] *= 1.15;
-  console.log(upgrades)
+upgradeSerfs.addEventListener("click", () => {
+    crowns -= upgrades[upgradeSerfs.id];
+    growthRate += 0.1;
+    playerItems[upgradeSerfs.id] += 1;
+    upgrades[upgradeSerfs.id] *= 1.15;
+    console.log(upgrades);
+    console.log(upgradeDisplays)
+    console.log(playerItems)
+    upgradeDisplays["SerfWorkforce"].innerText = `You possess ${playerItems["SerfWorkforce"]} Serf Workforces`;
+
 });
-upgradeB.addEventListener("click", () => {
-  counter -= upgrades[upgradeB.id];
+
+upgradeKnights.addEventListener("click", () => {
+  crowns -= upgrades[upgradeKnights.id];
   growthRate += 2.0;
-  playerItems[upgradeB.id] += 1;
-  upgrades[upgradeB.id] *= 1.15
+  playerItems[upgradeKnights.id] += 1;
+  upgrades[upgradeKnights.id] *= 1.15;
+
+  upgradeDisplays["KnightsOfTheSquareTable"].innerText = `You possess ${playerItems["KnightsOfTheSquareTable"]} Knights`;
 
 });
 
-upgradeC.addEventListener("click", () => {
-  counter -=  upgrades[upgradeC.id]
+upgradeBards.addEventListener("click", () => {
+  crowns -= upgrades[upgradeBards.id];
   growthRate += 50.0;
-  playerItems[upgradeC.id] += 1;
-  upgrades[upgradeC.id] *= 1.15
+  playerItems[upgradeBards.id] += 1;
+  upgrades[upgradeBards.id] *= 1.15;
+
+  upgradeDisplays["SingingBards"].innerText = `You possess ${playerItems["SingingBards"]} Bards`;
 
 });
 
 app.append(
   header,
   growthRateText,
-  buttonToClick,
-  TotalCount,
-  upgradeButton,
-  upgradeB,
-  upgradeC,
-  upgrade1Count,
-  upgrade2Count,
-  upgrade3Count,
+  gatherCrownsButton,
+  crownDisplay,
+  upgradeSerfs,
+  upgradeKnights,
+  upgradeBards,
+  serfsCountDisplay,
+  knightsCountDisplay,
+  bardsCountDisplay,
 );
