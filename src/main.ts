@@ -3,19 +3,59 @@ import "./style.css";
 const app: HTMLDivElement = document.querySelector("#app")!;
 
 const gameName = "My super duper amazing game";
-document.title = gameName;
-
 const header = document.createElement("h1");
 const TotalCount = document.createElement("div");
 const buttonToClick = document.createElement("button");
-const upgradeButton = document.createElement("button")
-upgradeButton.id = "FirstUpdate"
-upgradeButton.disabled = true;
+const upgradeButton = document.createElement("button");
+const upgrade1Count = document.createElement("div");
+const upgradeB = document.createElement("button");
+const upgrade2Count = document.createElement("div");
+const upgradeC = document.createElement("button");
+const upgrade3Count = document.createElement("div");
+const growthRateText = document.createElement("div")
 
 
-header.innerHTML = gameName;
+
+
 let counter: number = 0;
+let lastTime: number = 0;
+let growthRate: number = 0;
+
+
 TotalCount.textContent = `${counter} Books`;
+growthRateText.textContent = `Current Growth Rate: ${growthRate} books/sec`;
+upgradeButton.id = "FirstUpdate"
+upgradeB.id = "UpgradeB"
+upgradeC.id = "UpgradeC"
+upgradeButton.disabled = true;
+upgradeB.disabled = true;
+upgradeC.disabled = true;
+header.innerHTML = gameName;
+upgradeButton.innerHTML = "I cost 10"
+buttonToClick.innerHTML = "📖";
+document.title = gameName;
+upgradeB.innerText = "I cost 100";
+upgradeC.innerText = "I cost 1000";
+
+
+
+
+
+const upgrades: { [button: string]: number } = {
+    [upgradeButton.id]: 10,
+    [upgradeB.id]: 100,
+    [upgradeC.id]: 1000,
+  };
+const playerItems: { [name: string]: number } = {
+    [upgradeButton.id]: 0,
+    [upgradeB.id]: 0,
+    [upgradeC.id]: 0,
+
+}; //going to have a hashmap to display their purchaces
+
+
+
+
 
 
 
@@ -24,12 +64,16 @@ TotalCount.textContent = `${counter} Books`;
 
 function updateDisplay() {
   if (TotalCount) {
-    TotalCount.textContent = `${counter} Books`;
+    TotalCount.textContent = `${counter.toFixed(2)} Books`;
   }
+  if (growthRateText){
+    growthRateText.textContent = `Current Growth Rate: ${growthRate}`
+
+  }
+
 }
 
-let lastTime: number = 0;
-let growthRate: number = 0;
+
 
 function step(time: number) {
   if (!lastTime) {
@@ -42,17 +86,45 @@ function step(time: number) {
   updateDisplay();
   lastTime = time;
 
-  if (counter >= 10 && upgradeButton.disabled){
-    upgradeButton.disabled = false;
-  }
-  if (counter < 10 && !upgradeButton.disabled){
-    upgradeButton.disabled = true;
+  checkUpgrades()
+  displayPlayerUpgrades();
 
-  }
+//   if (counter >= 10 && upgradeButton.disabled){
+//     upgradeButton.disabled = false;
+//   }
+//   if (counter < 10 && !upgradeButton.disabled){
+//     upgradeButton.disabled = true;
+
+//   }
 
   requestAnimationFrame(step);
 }
 requestAnimationFrame(step);
+
+
+function checkUpgrades(){
+    
+    Object.keys(upgrades).forEach((buttonText) => {
+        const upgradeAmount = upgrades[buttonText];
+        const button = document.getElementById(buttonText) as HTMLButtonElement;
+        if (button){
+            button.disabled = counter < upgradeAmount
+
+        }
+    
+    })
+    
+}
+
+function displayPlayerUpgrades(){
+    Object.keys(playerItems).forEach((buttonID) => {
+        const amount = playerItems[buttonID]
+        const button = document.getElementById(buttonID) as HTMLButtonElement;
+        button.innerHTML = `You have ${amount} of upgrade ${buttonID}`
+
+        
+    })
+}
 
 buttonToClick.id = "myButton";
 buttonToClick.addEventListener("click", () => {
@@ -63,15 +135,28 @@ buttonToClick.addEventListener("click", () => {
 
 upgradeButton.addEventListener("click", () => {
     counter -=10
-    growthRate+=1
-
+    growthRate+=0.1
+    playerItems[upgradeButton.id] +=1
   });
-upgradeButton.innerHTML = "UPGRADE BABY"
-
-buttonToClick.innerHTML = "📖";
-
-
-
+upgradeB.addEventListener("click", () => {
+    counter-=100
+    growthRate+=2.0
+    playerItems[upgradeB.id] +=1
 
 
-app.append(header, buttonToClick, TotalCount, upgradeButton);
+});
+
+upgradeC.addEventListener("click", ()=>{
+    counter-=1000
+    growthRate+=50.0
+    playerItems[upgradeC.id] +=1
+
+})
+
+
+
+
+
+
+
+app.append(header,growthRateText,  buttonToClick, TotalCount, upgradeButton, upgradeB, upgradeC, upgrade1Count, upgrade2Count, upgrade3Count);
