@@ -14,12 +14,21 @@ const header = document.createElement("h1");
 const crownDisplay = document.createElement("div");
 const gatherCrownsButton = document.createElement("button");
 const growthRateText = document.createElement("div");
+const mainContent = document.createElement("div");
+const upgradesContainer = document.createElement("div");
+
+mainContent.id = "mainContent"
+upgradesContainer.id = "upgradesContainer"
+
+app.append(header, growthRateText, gatherCrownsButton, crownDisplay);
+mainContent.append(header, growthRateText, gatherCrownsButton, crownDisplay);
+app.append(mainContent, upgradesContainer);
 
 let crowns: number = 0;
 let lastTime: number = 0;
 let growthRate: number = 0;
 
-crownDisplay.textContent = `${crowns} Crowns`;
+crownDisplay.textContent = `${crowns.toFixed(0)} Crowns`;
 growthRateText.textContent = `Current Influence Rate: ${growthRate} crowns/sec`;
 
 header.innerHTML = gameName;
@@ -32,7 +41,7 @@ const availableItems: Item[] = [
     cost: 10,
     rate: 0.1,
     description:
-      "Oh boy I love serfdom I love being protected by the knights and having no land",
+      "Serfs love being protected by the knights and having no land",
   },
   {
     name: "Knights of the Square Table",
@@ -41,10 +50,10 @@ const availableItems: Item[] = [
     description: "Like the knights of the Roundtable but way worse",
   },
   {
-    name:"Plebeian",
+    name: "Plebeian",
     cost: 500,
     rate: 5,
-    description: "One roman is worth 50 serfs, everyone knows that"
+    description: "One roman is worth 50 serfs, everyone knows that",
   },
   {
     name: "Singing Bard",
@@ -53,10 +62,10 @@ const availableItems: Item[] = [
     description: "Will sing (or stop singing) for crowns",
   },
   {
-    name:"Playful Jester",
+    name: "Playful Jester",
     cost: 2000,
     rate: 100,
-    description: "They get to make fun of royalty and get food. Life is good."
+    description: "They get to make fun of royalty and get food. Life is good.",
   },
 ];
 
@@ -73,7 +82,7 @@ availableItems.forEach((item) => {
   upgradeButton.innerHTML = `Recruit ${item.name} (${item.cost} Crowns)`;
 
   upgradeButton.disabled = true;
-  app.append(upgradeButton, countDisplay, descriptionDiv);
+  upgradesContainer.append(upgradeButton, countDisplay, descriptionDiv);
   descriptionDiv.innerHTML = item.description;
   descriptionDiv.style.fontStyle = "italic";
 
@@ -95,7 +104,7 @@ availableItems.forEach((item) => {
 
 function updateDisplay() {
   if (crownDisplay) {
-    crownDisplay.textContent = `${crowns.toFixed(2)} Crowns`;
+    crownDisplay.textContent = `${crowns.toFixed(0)} Crowns`;
   }
   if (growthRateText) {
     growthRateText.textContent = `Current Influence Rate: ${growthRate.toFixed(2)} crowns/sec`;
@@ -139,5 +148,4 @@ gatherCrownsButton.addEventListener("click", () => {
   updateDisplay();
 });
 
-app.append(header, growthRateText, gatherCrownsButton, crownDisplay);
 requestAnimationFrame(step);
