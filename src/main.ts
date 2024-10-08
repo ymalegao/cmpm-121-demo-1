@@ -6,7 +6,7 @@ interface Item {
   name: string;
   cost: number;
   rate: number;
-  description:string;
+  description: string;
 }
 
 const gameName = "A Game of Stones";
@@ -27,9 +27,37 @@ gatherCrownsButton.innerHTML = "🪙🪙🪙";
 document.title = gameName;
 
 const availableItems: Item[] = [
-  { name: "Serf Workforce", cost: 10, rate: 0.1, description: "Oh boy I love serfdom I love being protected by the knights and having no land" },
-  { name: "Knights of the Square Table", cost: 100, rate: 2 , description: "Like the knights of the Roundtable but way worse"},
-  { name: "Singing Bards", cost: 1000, rate: 50 , description: "Will sing (or stop singing) for crowns"},
+  {
+    name: "Serf Workforce",
+    cost: 10,
+    rate: 0.1,
+    description:
+      "Oh boy I love serfdom I love being protected by the knights and having no land",
+  },
+  {
+    name: "Knights of the Square Table",
+    cost: 100,
+    rate: 2,
+    description: "Like the knights of the Roundtable but way worse",
+  },
+  {
+    name:"Plebeian",
+    cost: 500,
+    rate: 5,
+    description: "One roman is worth 50 serfs, everyone knows that"
+  },
+  {
+    name: "Singing Bard",
+    cost: 1000,
+    rate: 50,
+    description: "Will sing (or stop singing) for crowns",
+  },
+  {
+    name:"Playful Jester",
+    cost: 2000,
+    rate: 100,
+    description: "They get to make fun of royalty and get food. Life is good."
+  },
 ];
 
 const upgrades: { [key: string]: number } = {};
@@ -43,11 +71,11 @@ availableItems.forEach((item) => {
 
   upgradeButton.id = item.name.replace(/ /g, "");
   upgradeButton.innerHTML = `Recruit ${item.name} (${item.cost} Crowns)`;
-  
+
   upgradeButton.disabled = true;
   app.append(upgradeButton, countDisplay, descriptionDiv);
-  descriptionDiv.innerHTML = item.description
-  descriptionDiv.style.fontStyle = "italic"
+  descriptionDiv.innerHTML = item.description;
+  descriptionDiv.style.fontStyle = "italic";
 
   upgrades[upgradeButton.id] = item.cost;
   playerItems[upgradeButton.id] = 0;
