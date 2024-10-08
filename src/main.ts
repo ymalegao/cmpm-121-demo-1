@@ -17,8 +17,8 @@ const growthRateText = document.createElement("div");
 const mainContent = document.createElement("div");
 const upgradesContainer = document.createElement("div");
 
-mainContent.id = "mainContent"
-upgradesContainer.id = "upgradesContainer"
+mainContent.id = "mainContent";
+upgradesContainer.id = "upgradesContainer";
 
 app.append(header, growthRateText, gatherCrownsButton, crownDisplay);
 mainContent.append(header, growthRateText, gatherCrownsButton, crownDisplay);
@@ -40,8 +40,7 @@ const availableItems: Item[] = [
     name: "Serf Workforce",
     cost: 10,
     rate: 0.1,
-    description:
-      "Serfs love being protected by the knights and having no land",
+    description: "Serfs love being protected by the knights and having no land",
   },
   {
     name: "Knights of the Square Table",
@@ -141,7 +140,7 @@ function checkUpgrades() {
   });
 }
 
-gatherCrownsButton.id = "myButton";
+gatherCrownsButton.id = "gatherButton";
 gatherCrownsButton.addEventListener("click", () => {
   console.log(crowns);
   crowns++;
