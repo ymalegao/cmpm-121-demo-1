@@ -210,11 +210,9 @@ function generateStoneEmoji() {
   }, 1000);
 }
 
-
-document.addEventListener('keydown', (event) => {
-    if (event.key.toLowerCase() === 'h') {
-      crowns += 100000;
-      updateDisplay();
-      
-    }
-  });
+document.addEventListener("keydown", (event) => {
+  if (event.key.toLowerCase() === "h") {
+    crowns += 100000;
+    updateDisplay();
+  }
+});
