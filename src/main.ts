@@ -100,7 +100,7 @@ availableItems.forEach((item) => {
       item.cost = upgrades[upgradeButton.id];
       updateDisplay();
       updatePlayerDisplay(upgradeButton.id);
-      updateUpgradeButtonDisplay(upgradeButton.id); 
+      updateUpgradeButtonDisplay(upgradeButton.id);
     }
   });
 });
@@ -115,13 +115,15 @@ function updateDisplay() {
 }
 
 function updatePlayerDisplay(key: string) {
-  upgradeDisplays[key].innerText = `You possess ${playerItems[key]} ${availableItems.find(
-    (item) => item.name.replace(/ /g, "") === key
-  )!.name}`;
+  upgradeDisplays[key].innerText = `You possess ${playerItems[key]} ${
+    availableItems.find((item) => item.name.replace(/ /g, "") === key)!.name
+  }`;
 }
 
 function updateUpgradeButtonDisplay(key: string) {
-  const item = availableItems.find((item) => item.name.replace(/ /g, "") === key)!;
+  const item = availableItems.find(
+    (item) => item.name.replace(/ /g, "") === key,
+  )!;
   const button = document.getElementById(key) as HTMLButtonElement;
   if (button) {
     button.innerHTML = `Recruit ${item.name} (${upgrades[key].toFixed(2)} Crowns)`;
@@ -174,7 +176,7 @@ function generateStoneEmoji() {
   stoneEmoji.classList.add("stoneEmoji");
   stoneEmoji.textContent = "🪨";
 
-//should be in ccs.....
+  //should be in ccs.....
   stoneEmoji.style.position = "absolute";
   // Get the position of the header (game title)
   const headerRect = header.getBoundingClientRect(); // get text of where game of stones is
@@ -189,7 +191,7 @@ function generateStoneEmoji() {
 
   app.appendChild(stoneEmoji);
 
-    //animation i dint even know this was a thing
+  //animation i dint even know this was a thing
   stoneEmoji.animate(
     [
       { transform: "translateY(0px)", opacity: 1 },
@@ -199,11 +201,20 @@ function generateStoneEmoji() {
       duration: 1000,
       easing: "ease-in",
       fill: "forwards",
-    }
+    },
   );
-  //kill it 
+  //kill it
 
   setTimeout(() => {
     stoneEmoji.remove();
   }, 1000);
 }
+
+
+document.addEventListener('keydown', (event) => {
+    if (event.key.toLowerCase() === 'h') {
+      crowns += 100000;
+      updateDisplay();
+      
+    }
+  });
