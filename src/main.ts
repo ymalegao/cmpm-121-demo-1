@@ -29,7 +29,6 @@ let lastTime: number = 0;
 let growthRate: number = 0;
 let crownsEarnedAccumulator: number = 0;
 
-
 crownDisplay.textContent = `${crowns.toFixed(0)} Crowns`;
 growthRateText.textContent = `Current Influence Rate: ${growthRate} crowns/sec`;
 
@@ -80,7 +79,6 @@ availableItems.forEach((item) => {
   const descriptionDiv = document.createElement("div");
 
   upgradeButton.id = item.name.replace(/ /g, "");
-  upgradeButton.innerHTML = `Recruit ${item.name} (${item.cost} Crowns)`;
 
   upgradeButton.disabled = true;
   upgradesContainer.append(upgradeButton, countDisplay, descriptionDiv);
@@ -91,14 +89,18 @@ availableItems.forEach((item) => {
   playerItems[upgradeButton.id] = 0;
   upgradeDisplays[upgradeButton.id] = countDisplay;
 
+  updateUpgradeButtonDisplay(upgradeButton.id);
+
   upgradeButton.addEventListener("click", () => {
     if (crowns >= upgrades[upgradeButton.id]) {
       crowns -= upgrades[upgradeButton.id];
       growthRate += item.rate;
       playerItems[upgradeButton.id] += 1;
       upgrades[upgradeButton.id] *= 1.15;
+      item.cost = upgrades[upgradeButton.id];
       updateDisplay();
       updatePlayerDisplay(upgradeButton.id);
+      updateUpgradeButtonDisplay(upgradeButton.id); 
     }
   });
 });
@@ -113,8 +115,17 @@ function updateDisplay() {
 }
 
 function updatePlayerDisplay(key: string) {
-  upgradeDisplays[key].innerText =
-    `You possess ${playerItems[key]} ${availableItems.find((item) => item.name.replace(/ /g, "") === key)!.name}`;
+  upgradeDisplays[key].innerText = `You possess ${playerItems[key]} ${availableItems.find(
+    (item) => item.name.replace(/ /g, "") === key
+  )!.name}`;
+}
+
+function updateUpgradeButtonDisplay(key: string) {
+  const item = availableItems.find((item) => item.name.replace(/ /g, "") === key)!;
+  const button = document.getElementById(key) as HTMLButtonElement;
+  if (button) {
+    button.innerHTML = `Recruit ${item.name} (${upgrades[key].toFixed(2)} Crowns)`;
+  }
 }
 
 function step(time: number) {
@@ -125,7 +136,7 @@ function step(time: number) {
   const deltaTime = (time - lastTime) / 1000;
   const increment = deltaTime * growthRate;
   crowns += increment;
-  crownsEarnedAccumulator +=1;
+  crownsEarnedAccumulator += growthRate * deltaTime;
 
   while (crownsEarnedAccumulator >= 1) {
     generateStoneEmoji();
@@ -157,45 +168,42 @@ gatherCrownsButton.addEventListener("click", () => {
 
 requestAnimationFrame(step);
 
-
-
 function generateStoneEmoji() {
-    // Make a emoji div
-    const stoneEmoji = document.createElement('div');
-    stoneEmoji.classList.add('stoneEmoji');
-    stoneEmoji.textContent = '🪨';
-  
-    // Position it over the game title
-    stoneEmoji.style.position = 'absolute';
-    // Get the position of the header (game title)
-    const headerRect = header.getBoundingClientRect(); // get text of where game of stones is 
-    const appRect = app.getBoundingClientRect();
-  
-    // place the emoji at a random x position over the header
-    const x = headerRect.left + Math.random() * headerRect.width - appRect.left; 
-    const y = headerRect.top - appRect.top - 20; // above the header
-  
-    stoneEmoji.style.left = x + 'px';
-    stoneEmoji.style.top = y + 'px';
-  
-    app.appendChild(stoneEmoji);
-  
-    // Animate it falling down
-    stoneEmoji.animate(
-      [
-        { transform: 'translateY(0px)', opacity: 1 },
-        { transform: 'translateY(100px)', opacity: 0 },
-      ],
-      {
-        duration: 1000,
-        easing: 'ease-in',
-        fill: 'forwards',
-      }
-    );
-  
-    // Remove the element after animation
-    setTimeout(() => {
-      stoneEmoji.remove();
-    }, 1000);
-  }
-  
+  // Make an emoji div
+  const stoneEmoji = document.createElement("div");
+  stoneEmoji.classList.add("stoneEmoji");
+  stoneEmoji.textContent = "🪨";
+
+//should be in ccs.....
+  stoneEmoji.style.position = "absolute";
+  // Get the position of the header (game title)
+  const headerRect = header.getBoundingClientRect(); // get text of where game of stones is
+  const appRect = app.getBoundingClientRect();
+
+  // place the emoji at a random x position over the header
+  const x = headerRect.left + Math.random() * headerRect.width - appRect.left;
+  const y = headerRect.top - appRect.top - 20; // above the header
+
+  stoneEmoji.style.left = x + "px";
+  stoneEmoji.style.top = y + "px";
+
+  app.appendChild(stoneEmoji);
+
+    //animation i dint even know this was a thing
+  stoneEmoji.animate(
+    [
+      { transform: "translateY(0px)", opacity: 1 },
+      { transform: "translateY(600px)", opacity: 0 },
+    ],
+    {
+      duration: 1000,
+      easing: "ease-in",
+      fill: "forwards",
+    }
+  );
+  //kill it 
+
+  setTimeout(() => {
+    stoneEmoji.remove();
+  }, 1000);
+}
