@@ -1,5 +1,6 @@
 import "./style.css";
-import { Game, Item } from './gameLogic';
+import { Game } from "./gameLogic";
+//adding a comment
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 const game = new Game();
@@ -58,13 +59,16 @@ game.availableItems.forEach((item) => {
 });
 
 function updatePlayerDisplay(key: string) {
-  upgradeDisplays[key].innerText = `You possess ${game.availableItems.find(
-    (item) => item.name.replace(/ /g, "") === key
-  )!.name}`;
+  upgradeDisplays[key].innerText = `You possess ${
+    game.availableItems.find((item) => item.name.replace(/ /g, "") === key)!
+      .name
+  }`;
 }
 
 function updateUpgradeButtonDisplay(key: string) {
-  const item = game.availableItems.find((item) => item.name.replace(/ /g, "") === key)!;
+  const item = game.availableItems.find(
+    (item) => item.name.replace(/ /g, "") === key,
+  )!;
   const button = document.getElementById(key) as HTMLButtonElement;
   if (button) {
     button.innerHTML = `Recruit ${item.name} (${item.cost.toFixed(2)} Crowns)`;
@@ -93,7 +97,9 @@ function step(time: number) {
 
 function checkUpgrades() {
   game.availableItems.forEach((item) => {
-    const button = document.getElementById(item.name.replace(/ /g, "")) as HTMLButtonElement;
+    const button = document.getElementById(
+      item.name.replace(/ /g, ""),
+    ) as HTMLButtonElement;
     if (button) {
       button.disabled = !game.canPurchase(item.cost);
     }
@@ -116,7 +122,8 @@ function generateStoneEmoji() {
   const headerRect = header.getBoundingClientRect();
   const appRect = app.getBoundingClientRect();
 
-  const emojiX = headerRect.left + Math.random() * headerRect.width - appRect.left;
+  const emojiX =
+    headerRect.left + Math.random() * headerRect.width - appRect.left;
   const emojiY = headerRect.top - appRect.top - 20;
 
   stoneEmoji.style.left = `${emojiX}px`;
