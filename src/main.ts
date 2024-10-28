@@ -28,6 +28,8 @@ let crowns: number = 0;
 let lastTime: number = 0;
 let growthRate: number = 0;
 let crownsEarnedAccumulator: number = 0;
+const upgradeCostMultiplier = 1.15;
+const emojisize = 600;
 
 crownDisplay.textContent = `${crowns.toFixed(0)} Crowns`;
 growthRateText.textContent = `Current Influence Rate: ${growthRate} crowns/sec`;
@@ -96,7 +98,7 @@ availableItems.forEach((item) => {
       crowns -= upgrades[upgradeButton.id];
       growthRate += item.rate;
       playerItems[upgradeButton.id] += 1;
-      upgrades[upgradeButton.id] *= 1.15;
+      upgrades[upgradeButton.id] *= upgradeCostMultiplier;
       item.cost = upgrades[upgradeButton.id];
       updateDisplay();
       updatePlayerDisplay(upgradeButton.id);
