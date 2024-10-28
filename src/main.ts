@@ -29,7 +29,6 @@ let lastTime: number = 0;
 let growthRate: number = 0;
 let crownsEarnedAccumulator: number = 0;
 const upgradeCostMultiplier = 1.15;
-const emojisize = 600;
 
 crownDisplay.textContent = `${crowns.toFixed(0)} Crowns`;
 growthRateText.textContent = `Current Influence Rate: ${growthRate} crowns/sec`;
@@ -173,39 +172,22 @@ gatherCrownsButton.addEventListener("click", () => {
 requestAnimationFrame(step);
 
 function generateStoneEmoji() {
-  // Make an emoji div
   const stoneEmoji = document.createElement("div");
-  stoneEmoji.classList.add("stoneEmoji");
+  stoneEmoji.classList.add("emoji");
+  setTimeout(() => stoneEmoji.classList.add("falling"), 0);
   stoneEmoji.textContent = "🪨";
 
-  //should be in ccs.....
-  stoneEmoji.style.position = "absolute";
   // Get the position of the header (game title)
-  const headerRect = header.getBoundingClientRect(); // get text of where game of stones is
+  const headerRect = header.getBoundingClientRect();
   const appRect = app.getBoundingClientRect();
 
-  // place the emoji at a random x position over the header
-  const x = headerRect.left + Math.random() * headerRect.width - appRect.left;
-  const y = headerRect.top - appRect.top - 20; // above the header
+  const emojiX = headerRect.left + Math.random() * headerRect.width - appRect.left;
+  const emojiY = headerRect.top - appRect.top - 20;
 
-  stoneEmoji.style.left = x + "px";
-  stoneEmoji.style.top = y + "px";
-
+  stoneEmoji.style.left = emojiX + "px";
+  stoneEmoji.style.top = emojiY + "px";
   app.appendChild(stoneEmoji);
 
-  //animation i dint even know this was a thing
-  stoneEmoji.animate(
-    [
-      { transform: "translateY(0px)", opacity: 1 },
-      { transform: "translateY(600px)", opacity: 0 },
-    ],
-    {
-      duration: 1000,
-      easing: "ease-in",
-      fill: "forwards",
-    },
-  );
-  //kill it
 
   setTimeout(() => {
     stoneEmoji.remove();
