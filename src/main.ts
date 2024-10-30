@@ -1,14 +1,18 @@
 import "./style.css";
 import { Game } from "./gameLogic";
+
 //adding a comment
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 const game = new Game();
 
+const img = 'ironThrone.png';
+
 const gameName = "A Game of Stones";
 const header = document.createElement("h1");
 const crownDisplay = document.createElement("div");
 const gatherCrownsButton = document.createElement("button");
+gatherCrownsButton.innerHTML = `<img src="${img}" alt="Iron Throne">`;
 const growthRateText = document.createElement("div");
 const mainContent = document.createElement("div");
 const upgradesContainer = document.createElement("div");
@@ -23,7 +27,6 @@ app.append(mainContent, upgradesContainer);
 header.innerHTML = gameName;
 document.title = gameName;
 gatherCrownsButton.id = "gatherButton";
-gatherCrownsButton.innerHTML = "🪙🪙🪙";
 
 function updateDisplay() {
   crownDisplay.textContent = `${game.crowns.toFixed(0)} Crowns`;
